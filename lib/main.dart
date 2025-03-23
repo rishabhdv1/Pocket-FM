@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pocket_fm/presentation/routes/routes_page.dart';
 import 'package:pocket_fm/presentation/screens/home/bottom_navbar_screen.dart';
 
 void main() {
@@ -18,7 +19,8 @@ class MyApp extends StatelessWidget {
         // colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true
       ),
-      home: BottomNavbarScreen(),
+      home: BottomNavbarScreen(), /* AudioListScreen() */
+      routes: routesPage,
     );
   }
 }

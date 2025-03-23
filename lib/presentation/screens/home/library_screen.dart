@@ -6,6 +6,13 @@ class LibraryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<Map<String, dynamic>> menuData = [
+      {"title": "Settings", "icon": Icons.settings_outlined, "route": ""},
+      {"title": "Support", "icon": Icons.question_mark, "route": ""},
+      {"title": "My Profile", "icon": Icons.person, "route": ""},
+      {"title": "History", "icon": Icons.history, "route": ""},
+      {"title": "Share My Library", "icon": Icons.share, "route": ""},
+    ];
     List<Map<String, dynamic>> historyData = [
       {
         "status": true,
@@ -162,7 +169,27 @@ class LibraryScreen extends StatelessWidget {
           ),
           actions: [
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                showModalBottomSheet(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return SizedBox(
+                      height: 300,
+                      child: ListView.builder(
+                        itemCount: menuData.length,
+                        itemBuilder: (context, index) {
+                          final entry = menuData[index];
+                          return ListTile(
+                            leading: Icon(entry['icon']),
+                            title: Text("${entry['title']}"),
+                            onTap: () {},
+                          );
+                        },
+                      ),
+                    );
+                  }
+                );
+              },
               icon: Icon(Icons.more_vert)
             )
           ],

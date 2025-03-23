@@ -200,12 +200,19 @@ class _HomeScreenState extends State<HomeScreen> {
       padding: const EdgeInsets.all(8.0),
       child: InkWell(
         onTap: () {
-          Navigator.push(
+          showModalBottomSheet(
+            context: context,
+            isScrollControlled: true,
+            builder: (BuildContext context) {
+              return PlayPodcastScreen(book: book);
+            }
+          );
+          /* Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => PlayPodcastScreen(book: book)
             )
-          );
+          ); */
         },
         child: SizedBox(
           width: 155,

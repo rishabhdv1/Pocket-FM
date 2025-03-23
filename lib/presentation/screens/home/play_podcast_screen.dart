@@ -14,16 +14,20 @@ class PlayPodcastScreen extends StatelessWidget {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
+          leading: IconButton(
+            onPressed: () => Navigator.pop(context),
+            icon: Icon(Icons.keyboard_arrow_down)
+          ),
           // ignore: deprecated_member_use
           backgroundColor: Colors.blue.withOpacity(0.2),
           actions: [
             IconButton(
               onPressed: () {},
-              icon: Icon(Icons.whatshot_outlined),
+              icon: Icon(Icons.mobile_screen_share),
             ),
             IconButton(
               onPressed: () {},
-              icon: Icon(Icons.info_outline),
+              icon: Icon(Icons.more_vert),
             )
           ],
         ),

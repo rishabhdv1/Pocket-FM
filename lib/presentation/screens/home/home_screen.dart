@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:pocket_fm/data/book_data.dart';
 import 'package:pocket_fm/presentation/screens/home/play_podcast_screen.dart';
+import 'package:pocket_fm/presentation/screens/home/search_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -10,6 +12,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   String selectedLanguage = '';
+  late bool isPlaying = true;
+  final List<Map<String, dynamic>> data = bookCategories;
   final List<Map<String, dynamic>> categories = [
     {
       "category_name": "Continue Reading for 'UserName'",
@@ -19,18 +23,21 @@ class _HomeScreenState extends State<HomeScreen> {
           "title_hi": "ड न्यू अवतार",
           "author": "J.D. Salinger",
           "image": "assets/images/thumbnail.png",
+          "audio_url": "assets/audio/audio.mp3",
         },
         {
           "title": "Divya Naag Garuda Yoddha",
           "title_hi": "दिव्य नाग गरुड़ योद्धा",
           "author": "George Orwell",
           "image": "assets/images/thumbnail.png",
+          "audio_url": "assets/audio/audio.mp3",
         },
         {
           "title": "Zero Cultivation",
           "title_hi": "जीरो कल्टीवेशन",
           "author": "Harper Lee",
           "image": "assets/images/thumbnail.png",
+          "audio_url": "assets/audio/audio.mp3",
         },
       ],
     },
@@ -42,18 +49,21 @@ class _HomeScreenState extends State<HomeScreen> {
           "title_hi": "शिवम् : ड हिडन वारियर",
           "author": "J.D. Salinger",
           "image": "assets/images/thumbnail.png",
+          "audio_url": "assets/audio/audio.mp3",
         },
         {
           "title": "Insta Empire",
           "title_hi": "इन्स्टा एम्पायर",
           "author": "George Orwell",
           "image": "assets/images/thumbnail.png",
+          "audio_url": "assets/audio/audio.mp3",
         },
         {
           "title": "Malang",
           "title_hi": "मलंग",
           "author": "Harper Lee",
           "image": "assets/images/thumbnail.png",
+          "audio_url": "assets/audio/audio.mp3",
         },
       ],
     },
@@ -65,18 +75,21 @@ class _HomeScreenState extends State<HomeScreen> {
           "title_hi": "द कैचर इन द रये",
           "author": "J.D. Salinger",
           "image": "assets/images/thumbnail.png",
+          "audio_url": "assets/audio/audio.mp3",
         },
         {
           "title": "1984",
           "title_hi": "१९८४",
           "author": "George Orwell",
           "image": "assets/images/thumbnail.png",
+          "audio_url": "assets/audio/audio.mp3",
         },
         {
           "title": "To Kill a Mockingbird",
           "title_hi": "टू किल्ल अ मोकिंगबर्ड",
           "author": "Harper Lee",
           "image": "assets/images/thumbnail.png",
+          "audio_url": "assets/audio/audio.mp3",
         },
       ],
     },
@@ -86,12 +99,19 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Pocket Novel',
-          style: Theme.of(context).textTheme.headlineMedium?.copyWith(color: Colors.blue),
+          'Pocket FM',
+          style: Theme.of(context).textTheme.headlineMedium?.copyWith(color: Colors.red, fontWeight: FontWeight.bold),
         ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => SearchScreen()
+                )
+              );
+            },
             icon: Icon(Icons.search, size: 30),
           ),
           IconButton(
@@ -157,10 +177,10 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       body: ListView.builder(
-        itemCount: categories.length,
+        itemCount: data.length,
         itemBuilder: (context, index) {
-          final cat = categories[index];
-          final catContent = categories[index]['content'];
+          final cat = data[index];
+          final catContent = data[index]['content'];
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -193,13 +213,34 @@ class _HomeScreenState extends State<HomeScreen> {
           );
         },
       ),
+      bottomNavigationBar: isPlaying
+      ? ListTile(
+        contentPadding: EdgeInsets.only(right: 0, left: 8),
+        tileColor: Colors.black,
+        leading: SizedBox(
+          height: 50,
+          width: 50,
+          child: Image.network(
+            "assets/images/thumbnail.png",
+          ),
+        ),
+        title: Text(
+          "Ch 173 - Lorem ipsum dolor sit amet, consectetur",
+          overflow: TextOverflow.ellipsis,
+        ),
+        subtitle: Text("Divya Naag Garuda Yoddha"),
+        trailing: IconButton(
+          onPressed: () {},
+          icon: Icon(Icons.play_arrow)
+        ),
+      ) : null,
     );
   }
-  Widget _buildBookCard(Map<String, String> book) {
+  Widget _buildBookCard(Map<String, dynamic> book) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: InkWell(
-        onTap: () {
+        onTap: () async {
           showModalBottomSheet(
             context: context,
             isScrollControlled: true,
@@ -207,12 +248,6 @@ class _HomeScreenState extends State<HomeScreen> {
               return PlayPodcastScreen(book: book);
             }
           );
-          /* Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => PlayPodcastScreen(book: book)
-            )
-          ); */
         },
         child: SizedBox(
           width: 155,
@@ -255,12 +290,33 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       onPressed: () {
         setState(() {
-          selectedLanguage = language; // Update selected language
+          selectedLanguage = language;
         });
       },
       child: Text(
         language,
         style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+      ),
+    );
+  }
+}
+
+class BottomModalPage extends StatefulWidget {
+  const BottomModalPage({super.key});
+
+  @override
+  State<BottomModalPage> createState() => _BottomModalPageState();
+}
+
+class _BottomModalPageState extends State<BottomModalPage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Bottom Modal Page"),
+      ),
+      body: Center(
+        child: Text('Hello from bottom sheet'),
       ),
     );
   }
